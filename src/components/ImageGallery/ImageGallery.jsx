@@ -1,11 +1,7 @@
+import React from 'react';
 import { Gallery } from './ImageGallery.styled';
 import ImageGalleryItem from '../ImageGalleryItem/ImageGalleryItem';
-// import ImageGalleryItem from '../ImageGalleryItem/ImageGalleryItem';
-
-// import Modal from 'components/Modal/Modal';
-// import { Button } from 'components/Button/Button';
-
-import React from 'react';
+import PropTypes from 'prop-types';
 
 export function ImageGallery({ images, onClick }) {
   return (
@@ -14,3 +10,8 @@ export function ImageGallery({ images, onClick }) {
     </Gallery>
   );
 }
+
+ImageGallery.propTypes = {
+  images: PropTypes.array.isRequired,
+  onClick: PropTypes.func.isRequired,
+};
