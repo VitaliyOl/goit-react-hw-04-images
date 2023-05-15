@@ -24,7 +24,7 @@ export const App = () => {
   const [largeImageUrl, setLargeImageUrl] = useState('');
 
   const handleBtnLoadMore = () => {
-    setPage(page + 1);
+    setPage(prevPage => prevPage + 1);
   };
 
   const getLargeImgUrl = imgUrl => {
@@ -33,7 +33,7 @@ export const App = () => {
   };
 
   const toggleModal = () => {
-    setShowModal(!showModal);
+    setShowModal(prevState => !prevState);
   };
 
   const getQuery = ({ query }) => {
@@ -43,6 +43,7 @@ export const App = () => {
   };
 
   useEffect(() => {
+    // якщо запиту немає то й пошуку не буде!
     if (!query) {
       return;
     }
@@ -57,7 +58,8 @@ export const App = () => {
         } else {
           setImages(prevState => [...prevState, ...images.hits]);
           setIsLoader(false);
-          setTotalPages(images.totalHits / 12);
+          setTotalPages(Math.floor(images.totalHits / 12));
+          setError(false);
         }
       })
       .catch(error => console.log(error));
@@ -78,7 +80,7 @@ export const App = () => {
 
       {error && (
         <h1 style={{ margin: '0 auto' }}>
-          Oops... no image for this request :(({' '}
+          Oops... no image for this request :((
         </h1>
       )}
       <ToastContainer autoClose={2000} />
