@@ -43,26 +43,46 @@ export const App = () => {
   };
 
   useEffect(() => {
+    async function fetch() {
+      setIsLoader(true);
+      try {
+        const { hits, totalHits } = await GetImages(query, page);
+        if (hits.length < 1) {
+          setError(true);
+          setIsLoader(false);
+        } else {
+          setImages(prevState => [...prevState, ...hits]);
+          setIsLoader(false);
+          setTotalPages(Math.floor(totalHits / 12));
+          setError(false);
+        }
+      } catch (error) {
+        console.log(error);
+      }
+    }
+
     // якщо запиту немає то й пошуку не буде!
     if (!query) {
       return;
     }
 
-    setIsLoader(true);
+    console.log('first render');
 
-    GetImages(query, page)
-      .then(images => {
-        if (images.hits.length < 1 || query.trim() === '') {
-          setError(true);
-          setIsLoader(false);
-        } else {
-          setImages(prevState => [...prevState, ...images.hits]);
-          setIsLoader(false);
-          setTotalPages(Math.floor(images.totalHits / 12));
-          setError(false);
-        }
-      })
-      .catch(error => console.log(error));
+    fetch();
+
+    // GetImages(query, page)
+    //   .then(images => {
+    //     if (images.hits.length < 1 || query.trim() === '') {
+    //       setError(true);
+    //       setIsLoader(false);
+    //     } else {
+    //       setImages(prevState => [...prevState, ...images.hits]);
+    //       setIsLoader(false);
+    //       setTotalPages(Math.floor(images.totalHits / 12));
+    //       setError(false);
+    //     }
+    //   })
+    //   .catch(error => console.log(error));
   }, [page, query]);
 
   return (
